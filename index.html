@@ -169,6 +169,59 @@
         </div>
       </div>
 
+            <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <strong>Dados do Convênio</strong>
+        </div>
+        <div class="card-body row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Orgão</label>
+            <input type="text" placeholder="INSS" id="id-orgao" class="form-control form-control-sm" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Espécie/Secretaria</label>
+            <input type="text" id="id-especie" class="form-control form-control-sm" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Matrícula</label>
+            <input type="text" id="id-matricula" class="form-control form-control-sm" required>
+          </div>
+          <div class="col-md-1">
+            <label class="form-label">UF</label>
+            <select id="uf-endereco" class="form-select form-select-sm" required>
+              <option selected disabled>Selecione...</option>
+              <option>AC</option>
+              <option>AL</option>
+              <option>AP</option>
+              <option>AM</option>
+              <option>BA</option>
+              <option>CE</option>
+              <option>DF</option>
+              <option>ES</option>
+              <option>GO</option>
+              <option>MA</option>
+              <option>MT</option>
+              <option>MS</option>
+              <option>MG</option>
+              <option>PA</option>
+              <option>PB</option>
+              <option>PR</option>
+              <option>PE</option>
+              <option>PI</option>
+              <option>RJ</option>
+              <option>RN</option>
+              <option>RS</option>
+              <option>RO</option>
+              <option>RR</option>
+              <option>SC</option>
+              <option>SP</option>
+              <option>SE</option>
+              <option>TO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <!-- ENDEREÇO -->
       <div class="card mb-4">
         <div class="card-header bg-primary text-white">
@@ -251,15 +304,15 @@
             <input type="text" id="agencia" class="form-control form-control-sm" required>
           </div>
           <div class="col-md-3">
+            <label class="form-label">Conta</label>
+            <input type="text" id="conta" class="form-control form-control-sm" required>
+          </div>
+          <div class="col-md-3">
             <label class="form-label">Tipo</label>
             <select id="tipo-conta" class="form-select form-select-sm">
               <option selected value="C/C">Corrente</option>
               <option value="C/P">Poupança</option>
             </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Conta</label>
-            <input type="text" id="conta" class="form-control form-control-sm" required>
           </div>
           <div class="col-md-2">
             <label class="form-label">Dígito Verificador</label>
@@ -324,6 +377,5 @@
   <!-- Arquivo JS externo gerado: script.js -->
   <script src="script.js"></script>
 </body>
-
 
 </html>
