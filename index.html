@@ -37,7 +37,7 @@
 
 <body>
   <div class="container py-5">
-    <img id="logo-img" src="logo.png" alt="logo" class="mb-2">
+    <img id="logo-img" src="logo.png" alt="logo" class="mb-2"> <span> Envie o PDF gerado por esse formulário, para a digitação, junto da simulação feita.</span>
     <form class="needs-validation" novalidate>
       <!-- DADOS PESSOAIS -->
       <div class="card mb-4">
@@ -304,15 +304,15 @@
             <input type="text" id="agencia" class="form-control form-control-sm" required>
           </div>
           <div class="col-md-3">
-            <label class="form-label">Conta</label>
-            <input type="text" id="conta" class="form-control form-control-sm" required>
-          </div>
-          <div class="col-md-3">
             <label class="form-label">Tipo</label>
             <select id="tipo-conta" class="form-select form-select-sm">
               <option selected value="C/C">Corrente</option>
               <option value="C/P">Poupança</option>
             </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Conta</label>
+            <input type="text" id="conta" class="form-control form-control-sm" required>
           </div>
           <div class="col-md-2">
             <label class="form-label">Dígito Verificador</label>
@@ -394,3 +394,4 @@
 </body>
 
 </html>
+
