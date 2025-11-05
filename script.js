@@ -1,3 +1,8 @@
+/* =====================================================
+   script.js — Refactored and modularized
+   - All function/variable names in English
+   - Keeps HTML labels in Portuguese
+   ===================================================== */
 
 /* ===== Helpers ===== */
 const onlyDigits = str => (str || '').toString().replace(/\D/g, '');
@@ -181,10 +186,12 @@ function fillFormWithData(obj) {
   }
 }
 
+
+
 /* ===== Collect form data ===== */
 function collectFormData() {
   const data = {};
-  document.querySelectorAll('input, select').forEach(el => {
+  document.querySelectorAll('input, select, textarea').forEach(el => {
     const id = el.id || el.name || el.placeholder || el.className;
     data[id] = (el.value || '').toString().trim();
   });
@@ -194,37 +201,37 @@ function collectFormData() {
 }
 
 /* ===== Mock / test data ===== */
-function mockForm() {
-  const mock = {
-    'id-cpf': '123.456.789-00',
-    'id-nome': 'João da Silva',
-    'id-nascimento': '15/06/1986',
-    'id-rg': '1234567',
-    'id-uf-rg': 'SP',
-    'id-emissao': '10/03/2010',
-    'id-mae': 'Maria das Dores',
-    'id-pai': 'José da Silva',
-    'id-naturalidade': 'São Paulo',
-    'id-uf-naturalidade': 'SP',
-    'id-celular': '(11) 91234-5678',
-    'id-email': 'joaodasilva@email.com',
-    'id-cep': '01000-000',
-    'id-endereco': 'Rua das Flores',
-    'id-numero-endereco': '123',
-    'id-complemento-endereco': 'Apto 45',
-    'id-bairro': 'Centro',
-    'id-cidade': 'São Paulo',
-    'uf-endereco': 'SP',
-    'banco': '001 - Banco do Brasil',
-    'agencia': '1234-5',
-    'conta': '67890-1',
-    'tipo-conta': 'C/C',
-    'dv': '7',
-    'tipoOperacao': 'portabilidade',
-    'camposOperacao': ['350,00', '12345', '998877', 'Banco Original', '001', '15000', '72', '24', '36', 'Sim']
-  };
-  fillFormWithData(mock);
-}
+// function mockForm() {
+//   const mock = {
+//     'id-cpf': '123.456.789-00',
+//     'id-nome': 'João da Silva',
+//     'id-nascimento': '15/06/1986',
+//     'id-rg': '1234567',
+//     'id-uf-rg': 'SP',
+//     'id-emissao': '10/03/2010',
+//     'id-mae': 'Maria das Dores',
+//     'id-pai': 'José da Silva',
+//     'id-naturalidade': 'São Paulo',
+//     'id-uf-naturalidade': 'SP',
+//     'id-celular': '(11) 91234-5678',
+//     'id-email': 'joaodasilva@email.com',
+//     'id-cep': '01000-000',
+//     'id-endereco': 'Rua das Flores',
+//     'id-numero-endereco': '123',
+//     'id-complemento-endereco': 'Apto 45',
+//     'id-bairro': 'Centro',
+//     'id-cidade': 'São Paulo',
+//     'uf-endereco': 'SP',
+//     'banco': '001 - Banco do Brasil',
+//     'agencia': '1234-5',
+//     'conta': '67890-1',
+//     'tipo-conta': 'C/C',
+//     'dv': '7',
+//     'tipoOperacao': 'portabilidade',
+//     'camposOperacao': ['350,00', '12345', '998877', 'Banco Original', '001', '15000', '72', '24', '36', 'Sim']
+//   };
+//   fillFormWithData(mock);
+// }
 
 /* ===== Excel export using SheetJS ===== */
 // function exportToExcel(data) {
@@ -535,7 +542,7 @@ async function exportToPDF() {
         ['Tipo', data['tipo-conta']],
         ['Dígito Verificador', data['dv']]
       ]),
-
+      
       { text: '\nTIPO DE OPERAÇÃO', style: 'section' },
       makeTable([['Operação Selecionada', operacao]]),
 
@@ -545,6 +552,13 @@ async function exportToPDF() {
             makeTable(dynamicFields)
           ]
         : []),
+
+      { text: '\nOBSERVAÇÕES', style: 'section' },
+      {
+        text: data['id-observacoes'] || 'Nenhuma observação adicionada.',
+        fontSize: 10,
+        margin: [0, 0, 0, 10]
+      },
     ],
     styles: {
       section: { fontSize: 12, bold: true, color: '#003366', margin: [0, 15, 0, 8] }
@@ -600,14 +614,14 @@ function attachOperationHandler() {
 }
 
 // /* ===== Mock button creation ===== */
-function createMockButton() {
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'btn btn-warning mt-3';
-  btn.textContent = 'Mockar Dados de Teste';
-  btn.addEventListener('click', mockForm);
-  document.querySelector('form .text-center')?.appendChild(btn);
-}
+// function createMockButton() {
+//   const btn = document.createElement('button');
+//   btn.type = 'button';
+//   btn.className = 'btn btn-warning mt-3';
+//   btn.textContent = 'Mockar Dados de Teste';
+//   btn.addEventListener('click', mockForm);
+//   document.querySelector('form .text-center')?.appendChild(btn);
+// }
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -661,6 +675,6 @@ function init() {
   attachOperationHandler();
 //   attachCPFHandlers();
 //   attachFormHandler();
-  createMockButton();
+  // createMockButton();
 }
 init();
