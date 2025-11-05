@@ -115,6 +115,7 @@ function buildOperationFields(operationKey) {
       inp.type = type || 'text';
       inp.className = 'form-control form-control-sm';
       inp.id = fieldId;
+      inp.required = true;
 
       // oninput para campos "Parcela" e "Saldo Devedor"
       if (labelText === 'Parcela' || labelText === 'Saldo Devedor') {
@@ -198,161 +199,6 @@ function collectFormData() {
   if (dynamic.length) data.camposOperacao = Array.from(dynamic).map(i => i.value);
   return data;
 }
-
-/* ===== Mock / test data ===== */
-// function mockForm() {
-//   const mock = {
-//     'id-cpf': '123.456.789-00',
-//     'id-nome': 'João da Silva',
-//     'id-nascimento': '15/06/1986',
-//     'id-rg': '1234567',
-//     'id-uf-rg': 'SP',
-//     'id-emissao': '10/03/2010',
-//     'id-mae': 'Maria das Dores',
-//     'id-pai': 'José da Silva',
-//     'id-naturalidade': 'São Paulo',
-//     'id-uf-naturalidade': 'SP',
-//     'id-celular': '(11) 91234-5678',
-//     'id-email': 'joaodasilva@email.com',
-//     'id-cep': '01000-000',
-//     'id-endereco': 'Rua das Flores',
-//     'id-numero-endereco': '123',
-//     'id-complemento-endereco': 'Apto 45',
-//     'id-bairro': 'Centro',
-//     'id-cidade': 'São Paulo',
-//     'uf-endereco': 'SP',
-//     'banco': '001 - Banco do Brasil',
-//     'agencia': '1234-5',
-//     'conta': '67890-1',
-//     'tipo-conta': 'C/C',
-//     'dv': '7',
-//     'tipoOperacao': 'portabilidade',
-//     'camposOperacao': ['350,00', '12345', '998877', 'Banco Original', '001', '15000', '72', '24', '36', 'Sim']
-//   };
-//   fillFormWithData(mock);
-// }
-
-/* ===== Excel export using SheetJS ===== */
-// function exportToExcel(data) {
-//   const sheet = [
-//     ['', 'FORMULÁRIO DE CADASTRO'],
-//     [],
-//     ['DADOS PESSOAIS'],
-//     ['CPF', data['id-cpf']],
-//     ['Nome', data['id-nome']],
-//     ['Nascimento', data['id-nascimento']],
-//     ['RG', data['id-rg']],
-//     ['UF RG', data['id-uf-rg']],
-//     ['Emissão', data['id-emissao']],
-//     ['Mãe', data['id-mae']],
-//     ['Pai', data['id-pai']],
-//     ['Naturalidade', data['id-naturalidade']],
-//     ['UF Naturalidade', data['id-uf-naturalidade']],
-//     ['Celular', data['id-celular']],
-//     ['E-mail', data['id-email']],
-//     [],
-//     ['ENDEREÇO'],
-//     ['CEP', data['id-cep']],
-//     ['Endereço', data['id-endereco']],
-//     ['Número', data['id-numero-endereco']],
-//     ['Complemento', data['id-complemento-endereco']],
-//     ['Bairro', data['id-bairro']],
-//     ['Cidade', data['id-cidade']],
-//     ['UF', data['uf-endereco']],
-//     [],
-//     ['DADOS BANCÁRIOS'],
-//     ['Banco', data['banco']],
-//     ['Agência', data['agencia']],
-//     ['Conta', data['conta']],
-//     ['Tipo de Conta', data['tipo-conta']],
-//     ['Dígito', data['dv']],
-//     [],
-//     ['TIPO DE OPERAÇÃO'],
-//     ['Operação', data['tipoOperacao'] || '']
-//   ];
-
-//   const dynamic = container.querySelectorAll('input, select');
-//   dynamic.forEach(el => {
-//     const label = el.previousElementSibling?.innerText || 'Campo';
-//     sheet.push([label, el.value]);
-//   });
-
-//   const wb = XLSX.utils.book_new();
-//   const ws = XLSX.utils.aoa_to_sheet(sheet);
-//   ws['!cols'] = [{ wch: 30 }, { wch: 40 }];
-//   XLSX.utils.book_append_sheet(wb, ws, 'Cadastro');
-//   XLSX.writeFile(wb, 'formulario_cadastro.xlsx');
-// }
-
-
-// async function exportToPDF(data) {
-//   const { jsPDF } = window.jspdf;
-//   const doc = new jsPDF();
-
-//   let y = 15;
-//   doc.setFontSize(14);
-//   doc.text('FORMULÁRIO DE CADASTRO', 105, y, { align: 'center' });
-//   y += 10;
-
-//   doc.setFontSize(11);
-
-//   const addSection = (title) => {
-//     y += 8;
-//     doc.setFont(undefined, 'bold');
-//     doc.text(title, 10, y);
-//     doc.setFont(undefined, 'normal');
-//     y += 5;
-//   };
-
-//   const addField = (label, value) => {
-//     if (y > 280) { doc.addPage(); y = 15; }
-//     doc.text(`${label}: ${value || ''}`, 10, y);
-//     y += 6;
-//   };
-
-//   addSection('DADOS PESSOAIS');
-//   addField('CPF', data['id-cpf']);
-//   addField('Nome', data['id-nome']);
-//   addField('Nascimento', data['id-nascimento']);
-//   addField('RG', data['id-rg']);
-//   addField('UF RG', data['id-uf-rg']);
-//   addField('Emissão', data['id-emissao']);
-//   addField('Mãe', data['id-mae']);
-//   addField('Pai', data['id-pai']);
-//   addField('Naturalidade', data['id-naturalidade']);
-//   addField('UF Naturalidade', data['id-uf-naturalidade']);
-//   addField('Celular', data['id-celular']);
-//   addField('E-mail', data['id-email']);
-
-//   addSection('ENDEREÇO');
-//   addField('CEP', data['id-cep']);
-//   addField('Endereço', data['id-endereco']);
-//   addField('Número', data['id-numero-endereco']);
-//   addField('Complemento', data['id-complemento-endereco']);
-//   addField('Bairro', data['id-bairro']);
-//   addField('Cidade', data['id-cidade']);
-//   addField('UF', data['uf-endereco']);
-
-//   addSection('DADOS BANCÁRIOS');
-//   addField('Banco', data['banco']);
-//   addField('Agência', data['agencia']);
-//   addField('Conta', data['conta']);
-//   addField('Tipo de Conta', data['tipo-conta']);
-//   addField('Dígito', data['dv']);
-
-//   addSection('TIPO DE OPERAÇÃO');
-//   addField('Operação', data['tipoOperacao']);
-
-//   // Campos dinâmicos
-//   const dynamicFields = container.querySelectorAll('input, select');
-//   dynamicFields.forEach(el => {
-//     const label = el.previousElementSibling?.innerText || 'Campo';
-//     addField(label, el.value);
-//   });
-
-//   // Salva o arquivo
-//   doc.save('formulario_cadastro.pdf');
-// }
 
 function formatDate(input) {
     input.value = input.value.replace(/\D/g, '');
@@ -670,6 +516,7 @@ function init() {
   // createMockButton();
 }
 init();
+
 
 
 
