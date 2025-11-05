@@ -1,8 +1,3 @@
-/* =====================================================
-   script.js — Refactored and modularized
-   - All function/variable names in English
-   - Keeps HTML labels in Portuguese
-   ===================================================== */
 
 /* ===== Helpers ===== */
 const onlyDigits = str => (str || '').toString().replace(/\D/g, '');
@@ -678,3 +673,4 @@ function init() {
   // createMockButton();
 }
 init();
+
