@@ -1,8 +1,3 @@
-/* =====================================================
-   script.js — Refactored and modularized
-   - All function/variable names in English
-   - Keeps HTML labels in Portuguese
-   ===================================================== */
 
 /* ===== Helpers ===== */
 const onlyDigits = str => (str || '').toString().replace(/\D/g, '');
@@ -199,37 +194,37 @@ function collectFormData() {
 }
 
 /* ===== Mock / test data ===== */
-// function mockForm() {
-//   const mock = {
-//     'id-cpf': '123.456.789-00',
-//     'id-nome': 'João da Silva',
-//     'id-nascimento': '15/06/1986',
-//     'id-rg': '1234567',
-//     'id-uf-rg': 'SP',
-//     'id-emissao': '10/03/2010',
-//     'id-mae': 'Maria das Dores',
-//     'id-pai': 'José da Silva',
-//     'id-naturalidade': 'São Paulo',
-//     'id-uf-naturalidade': 'SP',
-//     'id-celular': '(11) 91234-5678',
-//     'id-email': 'joaodasilva@email.com',
-//     'id-cep': '01000-000',
-//     'id-endereco': 'Rua das Flores',
-//     'id-numero-endereco': '123',
-//     'id-complemento-endereco': 'Apto 45',
-//     'id-bairro': 'Centro',
-//     'id-cidade': 'São Paulo',
-//     'uf-endereco': 'SP',
-//     'banco': '001 - Banco do Brasil',
-//     'agencia': '1234-5',
-//     'conta': '67890-1',
-//     'tipo-conta': 'C/C',
-//     'dv': '7',
-//     'tipoOperacao': 'portabilidade',
-//     'camposOperacao': ['350,00', '12345', '998877', 'Banco Original', '001', '15000', '72', '24', '36', 'Sim']
-//   };
-//   fillFormWithData(mock);
-// }
+function mockForm() {
+  const mock = {
+    'id-cpf': '123.456.789-00',
+    'id-nome': 'João da Silva',
+    'id-nascimento': '15/06/1986',
+    'id-rg': '1234567',
+    'id-uf-rg': 'SP',
+    'id-emissao': '10/03/2010',
+    'id-mae': 'Maria das Dores',
+    'id-pai': 'José da Silva',
+    'id-naturalidade': 'São Paulo',
+    'id-uf-naturalidade': 'SP',
+    'id-celular': '(11) 91234-5678',
+    'id-email': 'joaodasilva@email.com',
+    'id-cep': '01000-000',
+    'id-endereco': 'Rua das Flores',
+    'id-numero-endereco': '123',
+    'id-complemento-endereco': 'Apto 45',
+    'id-bairro': 'Centro',
+    'id-cidade': 'São Paulo',
+    'uf-endereco': 'SP',
+    'banco': '001 - Banco do Brasil',
+    'agencia': '1234-5',
+    'conta': '67890-1',
+    'tipo-conta': 'C/C',
+    'dv': '7',
+    'tipoOperacao': 'portabilidade',
+    'camposOperacao': ['350,00', '12345', '998877', 'Banco Original', '001', '15000', '72', '24', '36', 'Sim']
+  };
+  fillFormWithData(mock);
+}
 
 /* ===== Excel export using SheetJS ===== */
 // function exportToExcel(data) {
@@ -431,26 +426,134 @@ function floatFormat(input) {
 }
 
 async function exportToPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('p', 'pt', 'a4');
-  let nome = document.getElementById("id-nome");
-  let operacao = document.getElementById("tipoOperacao");
+  const data = collectFormData();
+  const nome = data["id-nome"] || "Sem Nome";
+  const operacao = data["tipoOperacao"] || "Não Informada";
+  const logoPath = "logo.png";
 
-  const formElement = document.querySelector('form');
-  if (!formElement) return;
+  // Converte a logo para base64 para evitar erro CORS
+  async function getBase64Image(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
 
-  const canvas = await html2canvas(formElement, {
-    scale: 1, // qualidade
-    useCORS: true
+  const logoBase64 = await getBase64Image(logoPath).catch(() => null);
+
+  // Helper para criar tabela simples
+  const makeTable = (pairs) => ({
+    table: {
+      widths: ['30%', '70%'],
+      body: pairs.map(([label, value]) => [label, value || ''])
+    },
+    layout: 'lightHorizontalLines',
+    fontSize: 9,
+    margin: [0, 5, 0, 10]
   });
 
-  const imgData = canvas.toDataURL('image/png');
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = (canvas.height * pageWidth) / canvas.width;
+  // Campos dinâmicos da operação
+  const dynamicFields = Array.from(document.querySelectorAll('#camposOperacao input, #camposOperacao select'))
+    .map(el => [el.previousElementSibling?.innerText || el.id, el.value || '']);
 
-  doc.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight, '', 'FAST');
-  doc.save(`${nome.value} | ${operacao.value}.pdf`);
+  // Definição completa do PDF
+  const docDefinition = {
+    pageSize: 'A4',
+    pageMargins: [30, 90, 30, 50],
+    header: logoBase64
+      ? {
+          columns: [
+            { image: logoBase64, width: 70 },
+            {
+              text: 'Formulário de Proposta',
+              alignment: 'center',
+              fontSize: 14,
+              bold: true,
+              margin: [0, 15, 0, 0]
+            }
+          ],
+          margin: [30, 15, 30, 0]
+        }
+      : {
+          text: 'Formulário de Proposta',
+          alignment: 'center',
+          fontSize: 14,
+          bold: true,
+          margin: [0, 20, 0, 0]
+        },
+    content: [
+      { text: '\nDADOS PESSOAIS', style: 'section' },
+      makeTable([
+        ['CPF', data['id-cpf']],
+        ['Nome', data['id-nome']],
+        ['Nascimento', data['id-nascimento']],
+        ['RG', data['id-rg']],
+        ['UF do RG', data['id-uf-rg']],
+        ['Emissão', data['id-emissao']],
+        ['Mãe', data['id-mae']],
+        ['Pai', data['id-pai']],
+        ['Naturalidade', data['id-naturalidade']],
+        ['UF Naturalidade', data['id-uf-naturalidade']],
+        ['Celular', data['id-celular']],
+        ['E-mail', data['id-email']]
+      ]),
+
+      { text: '\nDADOS DO CONVÊNIO', style: 'section' },
+      makeTable([
+        ['Orgão', data['id-orgao']],
+        ['Espécie/Secretaria', data['id-especie']],
+        ['Matrícula', data['id-matricula']],
+        ['UF', data['uf-endereco']]
+      ]),
+
+      { text: '\nENDEREÇO', style: 'section' },
+      makeTable([
+        ['CEP', data['id-cep']],
+        ['Endereço', data['id-endereco']],
+        ['Número', data['id-numero-endereco']],
+        ['Complemento', data['id-complemento-endereco']],
+        ['Bairro', data['id-bairro']],
+        ['Cidade', data['id-cidade']],
+        ['UF', data['uf-endereco']]
+      ]),
+
+      { text: '\nDADOS BANCÁRIOS', style: 'section' },
+      makeTable([
+        ['Banco', data['banco']],
+        ['Agência', data['agencia']],
+        ['Conta', data['conta']],
+        ['Tipo', data['tipo-conta']],
+        ['Dígito Verificador', data['dv']]
+      ]),
+
+      { text: '\nTIPO DE OPERAÇÃO', style: 'section' },
+      makeTable([['Operação Selecionada', operacao]]),
+
+      ...(dynamicFields.length
+        ? [
+            { text: '\nCAMPOS DA OPERAÇÃO', style: 'section' },
+            makeTable(dynamicFields)
+          ]
+        : []),
+    ],
+    styles: {
+      section: { fontSize: 12, bold: true, color: '#003366', margin: [0, 15, 0, 8] }
+    }
+  };
+
+  pdfMake.createPdf(docDefinition).download(`${nome} - ${operacao}.pdf`);
 }
+
 
 
 
@@ -497,14 +600,14 @@ function attachOperationHandler() {
 }
 
 // /* ===== Mock button creation ===== */
-// function createMockButton() {
-//   const btn = document.createElement('button');
-//   btn.type = 'button';
-//   btn.className = 'btn btn-warning mt-3';
-//   btn.textContent = 'Mockar Dados de Teste';
-//   btn.addEventListener('click', mockForm);
-//   document.querySelector('form .text-center')?.appendChild(btn);
-// }
+function createMockButton() {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-warning mt-3';
+  btn.textContent = 'Mockar Dados de Teste';
+  btn.addEventListener('click', mockForm);
+  document.querySelector('form .text-center')?.appendChild(btn);
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -558,6 +661,6 @@ function init() {
   attachOperationHandler();
 //   attachCPFHandlers();
 //   attachFormHandler();
-//   createMockButton();
+  createMockButton();
 }
 init();
