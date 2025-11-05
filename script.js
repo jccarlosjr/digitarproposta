@@ -18,6 +18,7 @@ const setValue = (idOrElem, value) => {
 /* ===== Dynamic operation fields templates ===== */
 const OPERATION_TEMPLATES = {
   portabilidade: [
+    ['Banco a Digitar', 'text', 'col-md-2'],
     ['Parcela', 'text', 'col-md-1'],
     ['Código da Tabela', 'text', 'col-md-2'],
     ['Nº do Contrato', 'text', 'col-md-2'],
@@ -32,12 +33,14 @@ const OPERATION_TEMPLATES = {
     ['Seguro a ser Adicionado', 'text', 'col-md-3']
   ],
   margem: [
+    ['Banco a Digitar', 'text', 'col-md-2'],
     ['Parcela', 'text', 'col-md-3'],
     ['Código da Tabela', 'text', 'col-md-3'],
     ['Prazo', 'text', 'col-md-3'],
     ['Seguro a ser Adicionado', 'text', 'col-md-3']
   ],
   cartao: [
+    ['Banco a Digitar', 'text', 'col-md-2'],
     ['Parcela', 'text', 'col-md-2'],
     ['Código da Tabela', 'text', 'col-md-2'],
     ['Seguro a ser Adicionado', 'text', 'col-md-3'],
@@ -45,6 +48,7 @@ const OPERATION_TEMPLATES = {
     ['Deseja Saque', 'select', 'col-md-2', ['Selecione...', 'Sim', 'Não']]
   ],
   refin: [
+    ['Banco a Digitar', 'text', 'col-md-2'],
     ['Parcela', 'text', 'col-md-3'],
     ['Código da Tabela', 'text', 'col-md-3'],
     ['Prazo', 'text', 'col-md-3'],
@@ -666,5 +670,6 @@ function init() {
   // createMockButton();
 }
 init();
+
 
 
