@@ -499,13 +499,6 @@ async function exportToPDF() {
         ['CPF', data['id-cpf']],
         ['Nome', data['id-nome']],
         ['Nascimento', data['id-nascimento']],
-        ['RG', data['id-rg']],
-        ['UF do RG', data['id-uf-rg']],
-        ['Emissão', data['id-emissao']],
-        ['Mãe', data['id-mae']],
-        ['Pai', data['id-pai']],
-        ['Naturalidade', data['id-naturalidade']],
-        ['UF Naturalidade', data['id-uf-naturalidade']],
         ['Celular', data['id-celular']],
         ['E-mail', data['id-email']]
       ]),
@@ -533,9 +526,9 @@ async function exportToPDF() {
       makeTable([
         ['Banco', data['banco']],
         ['Agência', data['agencia']],
-        ['Conta', data['conta']],
         ['Tipo', data['tipo-conta']],
-        ['Dígito Verificador', data['dv']]
+        ['Conta', data['conta']],
+        ['Dígito Verificador', data['dv']],
       ]),
       
       { text: '\nTIPO DE OPERAÇÃO', style: 'section' },
@@ -673,4 +666,5 @@ function init() {
   // createMockButton();
 }
 init();
+
 
