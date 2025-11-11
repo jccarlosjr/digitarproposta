@@ -186,8 +186,6 @@ function fillFormWithData(obj) {
   }
 }
 
-
-
 /* ===== Collect form data ===== */
 function collectFormData() {
   const data = {};
@@ -344,6 +342,10 @@ async function exportToPDF() {
           margin: [0, 20, 0, 0]
         },
     content: [
+      { text: '\nDADOS PARCEIRO', style: 'section' },
+      makeTable([
+        ['ID Workbank', data['id-workbank']],
+      ]),
       { text: '\nDADOS PESSOAIS', style: 'section' },
       makeTable([
         ['CPF', data['id-cpf']],
